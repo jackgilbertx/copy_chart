@@ -1,0 +1,105 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { ResponsivePie } from '@nivo/pie';
+import { Loader } from '../../foundation';
+import Legend from '../../Legend';
+
+class PieChart extends React.Component {
+  state = {
+    centerValue: '',
+  };
+
+  renderCenterValue = event => this.setState({ centerValue: `${event.value}%` });
+
+  render() {
+    const { height, classes, data, renderLegend, colors } = this.props;
+    const { centerValue } = this.state;
+    
+     for (let i = 0; i < colors.length; i++) {
+      for (let j = 0; j < data.length; j++) {
+        data[i].color = colors[i];
+      }
+    }
+
+    const { radixNumber, responsiveFontValue } = {
+      radixNumber: 10,
+      responsiveFontValue: 8,
+    };
+
+    const fontSize = parseInt(height, radixNumber) / responsiveFontValue;
+
+    const style = {
+      container: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        height,
+      },
+      chart: {
+        height,
+        width: height,
+        position: 'relative',
+      },
+      centerValueStyle: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-44%,-35%)',
+        fontFamily: 'helvetica',
+        fontWeight: 'bold',
+        fontSize,
+      },
+      legend: {
+        justifyContent: "space-around",
+        marginLeft: "2%",
+        marginTop: "3%"
+      }
+    };
+
+    const { centerValueStyle, container, chart, legend } = style;
+
+    return (
+      <div style={{ container }} className={`${classes}`}>
+        <React.Suspense fallback={<Loader isInlineLoader />}>
+          <div style={chart}>
+            <ResponsivePie
+              data={data}
+              startAngle={-180}
+              innerRadius={0.87}
+              padAngle={1.5}
+              colors={colors}
+              enableRadialLabels={false}
+              enableSlicesLabels={false}
+              isInteractive
+              onClick={this.renderCenterValue}
+            />
+            <div style={centerValueStyle}>{centerValue}</div>
+          </div>
+          <div style={legend}>{renderLegend ? <Legend data={data} /> : ""}</div>
+        </React.Suspense>
+      </div>
+    );
+  }
+}
+
+export default PieChart;
+
+PieChart.propTypes = {
+  height: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  classes: PropTypes.string,
+  colors: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.shape({ scheme: PropTypes.string })]),
+};
+
+PieChart.defaultProps = {
+  classes: '',
+  colors: { scheme: 'accent' },
+};
