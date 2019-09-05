@@ -51,7 +51,7 @@ class PieChart extends React.Component {
         fontSize,
       },
       legend: {
-        justifyContent: "space-around",
+        //justifyContent: "space-around",
         marginLeft: "2%",
         marginTop: "3%"
       }
