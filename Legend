@@ -1,0 +1,104 @@
+import React from "react";
+class Legend extends React.Component {
+  state = { centerValue: "" };
+
+  render() {
+    const { data } = this.props;
+
+    const legendItems = data.map(legendItem => {
+      return (
+        <LegendItem
+          key={legendItem.id}
+          legendClick={() =>
+            this.setState({ centerValue: `${legendItem.value}%` })
+          }
+          legendItem={legendItem}
+        />
+      );
+    });
+
+    const legend = {
+      fontFamily: [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol"
+      ],
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+      // justifyContent: "space-around"
+      // marginLeft: "2%",
+      // marginTop: "3%"
+    };
+
+    return <div style={legend}>{legendItems}</div>; 
+  }
+}
+
+export default Legend;
+
+class LegendItem extends React.Component {
+  state = { hover: false };
+
+  hoverOn = () => {
+    this.setState({ hover: true });
+  };
+  hoverOff = () => {
+    this.setState({ hover: false });
+  };
+
+  render() {
+    const { legendClick, legendItem } = this.props;
+
+    const style = {
+      legendUnit: {
+        display: "flex",
+        cursor: "pointer",
+        marginRight: "19px"
+      },
+      legendMarker: {
+        backgroundColor: legendItem.color,
+        height: "18px",
+        width: "18px",
+        borderRadius: "50%",
+        marginRight: "4px"
+      },
+      legendValue: {
+        opacity: 0.7,
+        paddingLeft: "2px",
+        marginBottom: "3px",
+        fontSize: "0.8em",
+        marginRight: "10px"
+      },
+      legendValueHover: {
+        opacity: 1,
+        paddingLeft: "2px",
+        marginBottom: "3px",
+        fontSize: "0.8em",
+        marginRight: "10px"
+      }
+    };
+
+    const { legendUnit, legendValue, legendValueHover, legendMarker } = style;
+
+    return (
+      <div
+        onMouseEnter={this.hoverOn} //for text hover effect sans css file
+        onMouseLeave={this.hoverOff}
+        onClick={legendClick}
+        style={legendUnit}
+      >
+        <div style={legendMarker} />
+        <div style={!this.state.hover ? legendValue : legendValueHover}>
+          {legendItem.id}
+        </div>
+      </div>
+    );
+  }
+}
