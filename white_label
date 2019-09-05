@@ -1,0 +1,46 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import React from 'react';
+import { storiesOf } from '@storybook/react';
+import PieChart from '../index';
+import PieChartReadme from '../README.md';
+
+storiesOf('Capabilities/charts/PieChart', module)
+  .addParameters({
+    readme: {
+      sidebar: PieChartReadme,
+      codeTheme: 'github',
+    },
+  })
+  .add('Default', () => {
+    const data = [
+      {
+        id: 'Key 1',
+        label: 'Key 1',
+        value: 5,
+      },
+      {
+        id: 'Key 2',
+        label: 'Key 1',
+        value: 70,
+      },
+      {
+        id: 'Key 3',
+        label: 'Key 1',
+        value: 12,
+      },
+      {
+        id: 'Key 4',
+        label: 'Key 4',
+        value: 13,
+      },
+    ];
+
+    const props = {
+      data,
+      height: '500px',
+      renderLegend: true,
+    colors: ["#b15559", "#d99933", "#83a449", "#337e9e"]
+    };
+
+    return <PieChart {...props} />;
+  });
